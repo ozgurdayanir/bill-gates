@@ -1,0 +1,18 @@
+
+.bill-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: var(--font-color1);
+    border-radius: 10px;
+    gap: 20px;
+    padding: 20px;
+}
+
+.bill-container img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+}

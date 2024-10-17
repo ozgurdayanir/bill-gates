@@ -1,0 +1,12 @@
+.container {
+  width: 100vw;
+  height: fit-content;
+  display: flex;
+  padding: 24px 200px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
