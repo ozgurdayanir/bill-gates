@@ -8,7 +8,7 @@ import Car from '../../assets/images/car.jpg';
 import Horse from '../../assets/images/horse.jpg';
 import Mcdonalds from '../../assets/images/mcdonalds.jpg';
 import Skyscraper from '../../assets/images/skyscraper.jpg';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Receipt from '../receipt';
 
 const Cards = ({ money, setMoney }) => {
@@ -21,7 +21,7 @@ const Cards = ({ money, setMoney }) => {
         { img: Car, title: 'Car', price: 70000 },
         { img: Horse, title: 'Horse', price: 2500 },
         { img: Mcdonalds, title: 'Mcdonalds', price: 1500000 },
-        { img: Skyscraper, title: 'Skyscraper', price: 850000000 }
+        { img: Skyscraper, title: 'Skyscraper', price: 850000000 },
     ];
 
     const [quantities, setQuantities] = useState(Array(cardData.length).fill(0));
@@ -29,22 +29,17 @@ const Cards = ({ money, setMoney }) => {
     const [receipt, setReceipt] = useState([]);
 
     const handleBuy = (card, index) => {
-        const quantity = quantities[index] + 1; // Increment quantity by 1
-        const totalCost = card.price * quantity;
-
-        if (totalCost > money) {
+        const newCost = card.price; // Purchase price is the same as the selling price
+        if (newCost > money) {
             alert('Not enough money!');
             return;
         }
-
-        setMoney(money - totalCost);
-
-        // Update owned quantities
+        setMoney(money - newCost);
         const newOwnedQuantities = [...ownedQuantities];
-        newOwnedQuantities[index] += 1; // Increase owned quantity by 1
+        newOwnedQuantities[index] += 1; // Increase owned quantity
         setOwnedQuantities(newOwnedQuantities);
 
-        // Update the input quantity to reflect the new owned quantity
+        // 
         const newQuantities = [...quantities];
         newQuantities[index] = newOwnedQuantities[index]; // Set input to the new owned quantity
         setQuantities(newQuantities);
@@ -137,7 +132,6 @@ const Cards = ({ money, setMoney }) => {
         });
     };
 
-
     return (
         <>
             {cardData.map((card, index) => (
@@ -150,12 +144,11 @@ const Cards = ({ money, setMoney }) => {
                     <div className="btn-group">
                         <a
                             href="#"
-                            className="btn btn-sell"
+                            className={`btn btn-sell ${ownedQuantities[index] <= 0 ? 'disabled' : 'active'}`}
                             onClick={(e) => {
                                 e.preventDefault(); // Prevent default anchor behavior
                                 handleSell(card, index);
                             }}
-                            
                         >
                             Sell
                         </a>
@@ -179,7 +172,6 @@ const Cards = ({ money, setMoney }) => {
                     </div>
                 </div>
             ))}
-
             {receipt.length > 0 && (
                 <Receipt receipt={receipt} /> // Display the Receipt component
             )}

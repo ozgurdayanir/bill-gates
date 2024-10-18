@@ -48,9 +48,15 @@
     border-radius: 5px;
 }
 
-.btn-sell{
+.btn-sell.disabled {
+    cursor: not-allowed;
     color: var(--font-color2);
     background-color: var(--disabled-color);
+}
+
+.btn-sell.active {
+    color: var(--font-color1);
+    background-color: var(--error-color);
 }
 
 .btn-buy {

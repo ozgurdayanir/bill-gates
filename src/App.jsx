@@ -11,7 +11,7 @@ function App() {
     <>
     <Bill />
     <div className='container amount-container'>
-      <Amount money={money.toLocaleString()} />
+      <Amount money={money} />
     </div>
     <div className='container card-container'>
       <Cards money={money} setMoney={setMoney}/>
