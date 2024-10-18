@@ -7,6 +7,7 @@
   border: none;
   outline: none;
   text-decoration: none;
+  list-style: none;
 }
 
 :root {
@@ -16,12 +17,17 @@
   --font-color1: #fff;
   --font-color2: #010b09;
   --error-color: rgb(191, 23, 23);
-  --disabled-color: rgb(192, 192, 192);
+  --disabled-color: rgb(212, 212, 212);
 }
 
 body {
   background-color: var(--background-color);
   font-family: 'Poppins', sans-serif;
+}
+
+hr {
+  border: 1px solid var(--primary-color);
+  width: 50%;
 }
 
 p {
@@ -40,4 +46,11 @@ h2 {
   font-size: 24px;
   line-height: 32px;
   color: var(--font-color1)
+}
+
+h3 {
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--font-color2);
+  letter-spacing: 0.8px;
 }

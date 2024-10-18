@@ -1,6 +1,9 @@
-.amount {
+.amount-container {
     position: sticky;
-    top: 0;
+    top: -24px;
+}
+
+.amount {
     text-align: center;
     width: 100%;
     padding: 24px 0;

@@ -10,7 +10,6 @@ const Bill = () => {
                     <h1>Spend Bill Gates' Money</h1>
                 </div>
             </div>
-            <Amount />
         </>
     )
 }

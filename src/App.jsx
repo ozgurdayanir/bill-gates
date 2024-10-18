@@ -1,24 +1,20 @@
 import { useState } from 'react'
 import './App.css'
-import Card from './components/card/Card'
+import Cards from './components/card/Card'
 import Bill from './components/bill-gates-info'
+import Amount from './components/amount';
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [money, setMoney] = useState(100000000000);
   return (
     <>
     <Bill />
+    <div className='container amount-container'>
+      <Amount money={money.toLocaleString()} />
+    </div>
     <div className='container card-container'>
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+      <Cards money={money} setMoney={setMoney}/>
     </div>
     </>
   )

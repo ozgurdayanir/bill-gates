@@ -1,0 +1,17 @@
+.receipt-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: var(--font-color1);
+    border-radius: 10px;
+    gap: 20px;
+    padding: 20px;
+}
+
+.receipt-container p {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--primary-color);
+}

@@ -8,19 +8,135 @@ import Car from '../../assets/images/car.jpg';
 import Horse from '../../assets/images/horse.jpg';
 import Mcdonalds from '../../assets/images/mcdonalds.jpg';
 import Skyscraper from '../../assets/images/skyscraper.jpg';
-const Card = () => {
+import { useEffect, useState } from 'react';
+import Receipt from '../receipt';
 
+const Cards = ({ money, setMoney }) => {
     const cardData = [
-        { img: Netflix, title: 'Netflix' },
-        { img: Boeing, title: 'Boeing' },
-        { img: Book, title: 'Book' },
-        { img: Ship, title: 'Ship' },
-        { img: Slippers, title: 'Slippers' },
-        { img: Car, title: 'Car' },
-        { img: Horse, title: 'Horse' },
-        { img: Mcdonalds, title: 'Mcdonalds' },
-        { img: Skyscraper, title: 'Skyscraper' }
+        { img: Netflix, title: 'Netflix', price: 100 },
+        { img: Boeing, title: 'Boeing', price: 148000000 },
+        { img: Book, title: 'Book', price: 20 },
+        { img: Ship, title: 'Ship', price: 930000000 },
+        { img: Slippers, title: 'Slippers', price: 5 },
+        { img: Car, title: 'Car', price: 70000 },
+        { img: Horse, title: 'Horse', price: 2500 },
+        { img: Mcdonalds, title: 'Mcdonalds', price: 1500000 },
+        { img: Skyscraper, title: 'Skyscraper', price: 850000000 }
     ];
+
+    const [quantities, setQuantities] = useState(Array(cardData.length).fill(0));
+    const [ownedQuantities, setOwnedQuantities] = useState(Array(cardData.length).fill(0));
+    const [receipt, setReceipt] = useState([]);
+
+    const handleBuy = (card, index) => {
+        const quantity = quantities[index] + 1; // Increment quantity by 1
+        const totalCost = card.price * quantity;
+
+        if (totalCost > money) {
+            alert('Not enough money!');
+            return;
+        }
+
+        setMoney(money - totalCost);
+
+        // Update owned quantities
+        const newOwnedQuantities = [...ownedQuantities];
+        newOwnedQuantities[index] += 1; // Increase owned quantity by 1
+        setOwnedQuantities(newOwnedQuantities);
+
+        // Update the input quantity to reflect the new owned quantity
+        const newQuantities = [...quantities];
+        newQuantities[index] = newOwnedQuantities[index]; // Set input to the new owned quantity
+        setQuantities(newQuantities);
+
+        // Update receipt
+        setReceipt(prevReceipt => {
+            const existingItem = prevReceipt.find(item => item.title === card.title);
+            if (existingItem) {
+                // If the item already exists, update the quantity
+                existingItem.quantity += 1;
+                return [...prevReceipt]; // Return updated receipt
+            } else {
+                // If the item does not exist, add it to the receipt
+                return [...prevReceipt, { ...card, quantity: 1, total: card.price }];
+            }
+        });
+    };
+
+    const handleSell = (card, index) => {
+        if (ownedQuantities[index] <= 0) {
+            alert('You do not own any of this item to sell!');
+            return;
+        }
+
+        const totalSale = card.price; // Selling price is the same as the purchase price
+        setMoney(money + totalSale);
+
+        const newOwnedQuantities = [...ownedQuantities];
+        newOwnedQuantities[index] -= 1; // Decrease owned quantity
+        setOwnedQuantities(newOwnedQuantities);
+
+        // Update the input quantity to reflect the new owned quantity
+        const newQuantities = [...quantities];
+        newQuantities[index] = newOwnedQuantities[index]; // Set input to the new owned quantity
+        setQuantities(newQuantities);
+
+        // Update receipt for selling
+        setReceipt(prevReceipt => {
+            const existingItem = prevReceipt.find(item => item.title === card.title);
+            if (existingItem) {
+                existingItem.quantity -= 1;
+                if (existingItem.quantity <= 0) {
+                    // Remove item from receipt if quantity is 0
+                    return prevReceipt.filter(item => item.title !== card.title);
+                }
+                return [...prevReceipt]; // Return updated receipt
+            }
+            return prevReceipt; // No change if item not found
+        });
+    };
+    const handleQuantityChange = (index, value) => {
+        const newQuantities = [...quantities];
+
+        if (value < 0) return; // Negatif değer girilmesin
+
+        // Yeni girilen değeri güncelle
+        newQuantities[index] = value;
+        setQuantities(newQuantities);
+
+        const card = cardData[index];
+        const totalCost = card.price * value;
+
+        // Eğer girilen miktar paradan fazlaysa, kullanıcıyı uyar
+        if (totalCost > money) {
+            alert('Not enough money!');
+            return;
+        }
+
+        // Parayı güncelle (fark kadar)
+        setMoney(money - (card.price * (value - ownedQuantities[index])));
+
+        // Sahip olunan miktarı güncelle
+        const newOwnedQuantities = [...ownedQuantities];
+        newOwnedQuantities[index] = value;
+        setOwnedQuantities(newOwnedQuantities);
+
+        // Fişi güncelle
+        setReceipt(prevReceipt => {
+            const existingItem = prevReceipt.find(item => item.title === card.title);
+            if (existingItem) {
+                existingItem.quantity = value;
+                if (value === 0) {
+                    return prevReceipt.filter(item => item.title !== card.title); // Adet 0 ise fişten sil
+                }
+                return [...prevReceipt];
+            } else if (value > 0) {
+                return [...prevReceipt, { ...card, quantity: value, total: card.price * value }];
+            }
+            return prevReceipt;
+        });
+    };
+
 
     return (
         <>
@@ -28,17 +144,47 @@ const Card = () => {
                 <div key={index} className="card">
                     <div className="card-body">
                         <img src={card.img} alt={card.title} />
-                        <h5 className="card-title">{card.title}</h5>
+                        <h3 className="card-title">{card.title}</h3>
+                        <p>${card.price.toLocaleString()}</p>
                     </div>
                     <div className="btn-group">
-                        <a href="#" className="btn btn-primary">Sell</a>
-                        <input type="text" placeholder="0" />
-                        <a href="#" className="btn btn-primary">Buy</a>
+                        <a
+                            href="#"
+                            className="btn btn-sell"
+                            onClick={(e) => {
+                                e.preventDefault(); // Prevent default anchor behavior
+                                handleSell(card, index);
+                            }}
+                            
+                        >
+                            Sell
+                        </a>
+                        <input
+                            type="number"
+                            placeholder="0"
+                            min="0"
+                            value={quantities[index] === 0 ? '' : quantities[index]}
+                            onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
+                        />
+                        <a
+                            href="#"
+                            className="btn btn-buy"
+                            onClick={(e) => {
+                                e.preventDefault(); // Prevent default anchor behavior
+                                handleBuy(card, index);
+                            }}
+                        >
+                            Buy
+                        </a>
                     </div>
                 </div>
             ))}
+
+            {receipt.length > 0 && (
+                <Receipt receipt={receipt} /> // Display the Receipt component
+            )}
         </>
     );
 };
 
-export default Card;
+export default Cards;
