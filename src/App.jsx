@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import Cards from './components/card/Card'
+import Card from './components/card/Card'
 import Bill from './components/bill-gates-info'
 import Amount from './components/amount';
 
@@ -14,7 +14,7 @@ function App() {
       <Amount money={money} />
     </div>
     <div className='container card-container'>
-      <Cards money={money} setMoney={setMoney}/>
+      <Card money={money} setMoney={setMoney}/>
     </div>
     </>
   )

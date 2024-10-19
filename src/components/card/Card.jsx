@@ -11,7 +11,11 @@ import Skyscraper from '../../assets/images/skyscraper.jpg';
 import { useState } from 'react';
 import Receipt from '../receipt';
 
-const Cards = ({ money, setMoney }) => {
+// Cards component has two props: money and setMoney
+// money is the amount of money the user has
+// setMoney is a function that updates the amount of money
+const Card = ({ money, setMoney }) => {
+    // Card data with image, title, and price
     const cardData = [
         { img: Netflix, title: 'Netflix', price: 100 },
         { img: Boeing, title: 'Boeing', price: 148000000 },
@@ -24,10 +28,14 @@ const Cards = ({ money, setMoney }) => {
         { img: Skyscraper, title: 'Skyscraper', price: 850000000 },
     ];
 
+    // quantities: input field for each card
+    // ownedQuantities: owned quantity of each card
+    // receipt: list of items purchased
     const [quantities, setQuantities] = useState(Array(cardData.length).fill(0));
     const [ownedQuantities, setOwnedQuantities] = useState(Array(cardData.length).fill(0));
     const [receipt, setReceipt] = useState([]);
 
+    // handleBuy is used to buy the card
     const handleBuy = (card, index) => {
         const newCost = card.price; // Purchase price is the same as the selling price
         if (newCost > money) {
@@ -35,11 +43,12 @@ const Cards = ({ money, setMoney }) => {
             return;
         }
         setMoney(money - newCost);
+
+        // Update owned quantities
         const newOwnedQuantities = [...ownedQuantities];
         newOwnedQuantities[index] += 1; // Increase owned quantity
         setOwnedQuantities(newOwnedQuantities);
 
-        // 
         const newQuantities = [...quantities];
         newQuantities[index] = newOwnedQuantities[index]; // Set input to the new owned quantity
         setQuantities(newQuantities);
@@ -58,6 +67,7 @@ const Cards = ({ money, setMoney }) => {
         });
     };
 
+    // handleSell is used to sell the card
     const handleSell = (card, index) => {
         if (ownedQuantities[index] <= 0) {
             alert('You do not own any of this item to sell!');
@@ -179,4 +189,4 @@ const Cards = ({ money, setMoney }) => {
     );
 };
 
-export default Cards;
+export default Card;
