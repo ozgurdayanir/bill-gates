@@ -1,32 +1,12 @@
 import './style.css';
-import Netflix from '../../assets/images/netflix.jpg';
-import Boeing from '../../assets/images/boeing-747.jpg';
-import Book from '../../assets/images/book.jpg';
-import Ship from '../../assets/images/cruise-ship.jpg';
-import Slippers from '../../assets/images/slippers.jpg';
-import Car from '../../assets/images/car.jpg';
-import Horse from '../../assets/images/horse.jpg';
-import Mcdonalds from '../../assets/images/mcdonalds.jpg';
-import Skyscraper from '../../assets/images/skyscraper.jpg';
+import cardData from '../../assets/data.json';
 import { useState } from 'react';
 import Receipt from '../receipt';
 
-// Cards component has two props: money and setMoney
+// Card component has two props: money and setMoney
 // money is the amount of money the user has
 // setMoney is a function that updates the amount of money
 const Card = ({ money, setMoney }) => {
-    // Card data with image, title, and price
-    const cardData = [
-        { img: Netflix, title: 'Netflix', price: 100 },
-        { img: Boeing, title: 'Boeing', price: 148000000 },
-        { img: Book, title: 'Book', price: 20 },
-        { img: Ship, title: 'Ship', price: 930000000 },
-        { img: Slippers, title: 'Slippers', price: 5 },
-        { img: Car, title: 'Car', price: 70000 },
-        { img: Horse, title: 'Horse', price: 2500 },
-        { img: Mcdonalds, title: 'Mcdonalds', price: 1500000 },
-        { img: Skyscraper, title: 'Skyscraper', price: 850000000 },
-    ];
 
     // quantities: input field for each card
     // ownedQuantities: owned quantity of each card
@@ -55,7 +35,7 @@ const Card = ({ money, setMoney }) => {
 
         // Update receipt
         setReceipt(prevReceipt => {
-            const existingItem = prevReceipt.find(item => item.title === card.title);
+            const existingItem = prevReceipt.find(item => item.name === card.name);
             if (existingItem) {
                 // If the item already exists, update the quantity
                 existingItem.quantity += 1;
@@ -88,12 +68,12 @@ const Card = ({ money, setMoney }) => {
 
         // Update receipt for selling
         setReceipt(prevReceipt => {
-            const existingItem = prevReceipt.find(item => item.title === card.title);
+            const existingItem = prevReceipt.find(item => item.name === card.name);
             if (existingItem) {
                 existingItem.quantity -= 1;
                 if (existingItem.quantity <= 0) {
                     // Remove item from receipt if quantity is 0
-                    return prevReceipt.filter(item => item.title !== card.title);
+                    return prevReceipt.filter(item => item.name !== card.name);
                 }
                 return [...prevReceipt]; // Return updated receipt
             }
@@ -128,11 +108,11 @@ const Card = ({ money, setMoney }) => {
 
         // Fişi güncelle
         setReceipt(prevReceipt => {
-            const existingItem = prevReceipt.find(item => item.title === card.title);
+            const existingItem = prevReceipt.find(item => item.name === card.name);
             if (existingItem) {
                 existingItem.quantity = value;
                 if (value === 0) {
-                    return prevReceipt.filter(item => item.title !== card.title); // Adet 0 ise fişten sil
+                    return prevReceipt.filter(item => item.name !== card.name); // Adet 0 ise fişten sil
                 }
                 return [...prevReceipt];
             } else if (value > 0) {
@@ -145,10 +125,17 @@ const Card = ({ money, setMoney }) => {
     return (
         <>
             {cardData.map((card, index) => (
-                <div key={index} className="card">
+                <div key={card.id} className="card">
                     <div className="card-body">
-                        <img src={card.img} alt={card.title} />
-                        <h3 className="card-title">{card.title}</h3>
+                    {(() => {
+                            try {
+                                return <img src={card.img} alt={card.name} />;
+                            } catch (error) {
+                                console.error(`Error loading image: ${card.img}`, error);
+                                return <p>Image not found</p>;
+                            }
+                        })()}
+                        <h3 className="card-title">{card.name}</h3>
                         <p>${card.price.toLocaleString()}</p>
                     </div>
                     <div className="btn-group">
@@ -171,11 +158,18 @@ const Card = ({ money, setMoney }) => {
                         />
                         <a
                             href="#"
-                            className="btn btn-buy"
+                            className={`btn btn-buy ${ card.id === 42 && ownedQuantities[index] >= 1 ? 'disabled' : 'active'}`}
                             onClick={(e) => {
-                                e.preventDefault(); // Prevent default anchor behavior
-                                handleBuy(card, index);
+                                e.preventDefault();
+                                if (!(card.id === 42 && ownedQuantities[index] >= 1)) {
+                                    handleBuy(card, index);
+                                } else if (card.id === 42 && ownedQuantities[index] >= 1) {
+                                    alert('There is only one Mona Lisa on the world!');
+                                }
                             }}
+                            // Button disable
+                            disabled={card.id === 42 && ownedQuantities[index] >= 1}
+                            
                         >
                             Buy
                         </a>

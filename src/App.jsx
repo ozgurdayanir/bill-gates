@@ -9,13 +9,13 @@ function App() {
   const [money, setMoney] = useState(100000000000);
   return (
     <>
-    <Bill />
-    <div className='container amount-container'>
-      <Amount money={money} />
-    </div>
-    <div className='container card-container'>
-      <Card money={money} setMoney={setMoney}/>
-    </div>
+      <Bill />
+      <div className='container amount-container'>
+        <Amount money={money} />
+      </div>
+      <div className='container card-container'>
+        <Card money={money} setMoney={setMoney} />
+      </div>
     </>
   )
 }

@@ -1,6 +1,5 @@
 import './style.css';
-import BillGatesImg from '../../assets/images/billgates.jpg';
-import Amount from '../amount/index.js';
+import BillGatesImg from '/img/billgates.jpg';
 const Bill = () => {
     return (
         <>

@@ -59,10 +59,17 @@
     background-color: var(--error-color);
 }
 
-.btn-buy {
+.btn-buy.disabled { 
+    cursor: not-allowed;
+    color: var(--font-color2);
+    background-color: var(--disabled-color);
+}
+
+.btn-buy.active {
     color: var(--font-color1);
     background: var(--gradient-bg);
 }
+
 
 .btn-group input {
     width: calc(33.33% - 12px);

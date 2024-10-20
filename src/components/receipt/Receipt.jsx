@@ -10,7 +10,7 @@ const Receipt = ({ receipt }) => {
       <ul>
         {receipt.map((item, index) => (
           <li key={index}>
-            {item.title} (x{item.quantity}) - ${ (item.total * item.quantity).toLocaleString() }
+            {item.name} (x{item.quantity}) - ${ (item.total * item.quantity).toLocaleString() }
           </li>
         ))}
       </ul>
