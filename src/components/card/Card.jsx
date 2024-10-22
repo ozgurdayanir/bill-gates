@@ -150,6 +150,7 @@ const Card = ({ money, setMoney }) => {
                             Sell
                         </a>
                         <input
+                            className={`${ownedQuantities[index] <= 0 ? 'default' : 'focused'}`}
                             type="number"
                             placeholder="0"
                             min="0"
