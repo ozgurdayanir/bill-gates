@@ -127,7 +127,7 @@ const Card = ({ money, setMoney }) => {
             {cardData.map((card, index) => (
                 <div key={card.id} className="card">
                     <div className="card-body">
-                    {(() => {
+                        {(() => {
                             try {
                                 return <img src={card.img} alt={card.name} />;
                             } catch (error) {
@@ -159,7 +159,7 @@ const Card = ({ money, setMoney }) => {
                         />
                         <a
                             href="#"
-                            className={`btn btn-buy ${ card.id === 42 && ownedQuantities[index] >= 1 ? 'disabled' : 'active'}`}
+                            className={`btn btn-buy ${card.id === 42 && ownedQuantities[index] >= 1 ? 'disabled' : 'active'}`}
                             onClick={(e) => {
                                 e.preventDefault();
                                 if (!(card.id === 42 && ownedQuantities[index] >= 1)) {
@@ -170,16 +170,18 @@ const Card = ({ money, setMoney }) => {
                             }}
                             // Button disable
                             disabled={card.id === 42 && ownedQuantities[index] >= 1}
-                            
+
                         >
                             Buy
                         </a>
                     </div>
                 </div>
             ))}
+
             {receipt.length > 0 && (
-                <Receipt receipt={receipt} /> // Display the Receipt component
+                <Receipt receipt={receipt} setMoney={setMoney} setReceipt={setReceipt} ownedQuantities={ownedQuantities} setOwnedQuantities={setOwnedQuantities} setQuantities={setQuantities} /> // Display the Receipt component
             )}
+
         </>
     );
 };

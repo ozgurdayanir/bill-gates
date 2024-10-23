@@ -15,3 +15,13 @@
     font-weight: 600;
     color: var(--primary-color);
 }
+
+.btn-sell-all {
+    background-color: var(--error-color);
+    color: var(--font-color1);
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
